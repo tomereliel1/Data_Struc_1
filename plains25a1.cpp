@@ -49,6 +49,7 @@ StatusType Plains::join_herd(int horseId, int herdId)
         emptyHerds = emptyHerds->remove(herdId);
     }
     horses->find(horseId)->getData()->setHerd(herds->find(herdId)->getData().get());
+    herds->find(herdId)->getData()->addHorse();
     //add after write addHorse
     //herds->find(herdId)->addHorse();
 
@@ -61,7 +62,22 @@ StatusType Plains::follow(int horseId, int horseToFollowId)
 
 StatusType Plains::leave_herd(int horseId)
 {
-    return StatusType::FAILURE;
+    if (horseId <= 0){
+        return StatusType::INVALID_INPUT;
+    }else if (horses->find(horseId) == nullptr) {
+        return StatusType::FAILURE;
+    } else if (horses->find(horseId)->getData()->getHerd() == nullptr){
+        return StatusType::FAILURE;
+    } else {
+        horses->find(horseId)->getData()->zeroFollowers();
+        horses->find(horseId)->getData()->setFollow(nullptr);
+        horses->find(horseId)->getData()->getHerd()->subHorse();
+        if (horses->find(horseId)->getData()->getHerd()->getHorseNumber() == 0){
+            emptyHerds = emptyHerds->insert(horses->find(horseId)->getData()->getHerd()->getId(), make_shared<Herd>(horses->find(horseId)->getData()->getHerd()->getId()));
+            herds = herds->remove(horses->find(horseId)->getData()->getHerd()->getId());
+        }
+        //צריך להכניס ניתוק של כל הסוסים שעוקבים אחרי הסוס שהוצאנו
+    }
 }
 
 output_t<int> Plains::get_speed(int horseId)

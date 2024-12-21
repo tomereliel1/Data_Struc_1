@@ -16,9 +16,15 @@ public:
      */
     Herd(int id);
 
+    void addHorse();
+
 //    Herd(Herd& otherHerd);
 //
-//    int getId() const;
+    int getId() const;
+
+    void subHorse();
+
+    int getHorseNumber() const;
 };
 
 

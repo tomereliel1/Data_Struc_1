@@ -25,9 +25,13 @@ public:
      */
      int getSpeed() const;
 
-     const Herd* getHerd() const;
+     Herd* getHerd() const;
 
      void setHerd(Herd* herd);
+
+     void zeroFollowers();
+
+    void setFollow(Horse* horse);
 
 };
 
