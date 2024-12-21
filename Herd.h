@@ -1,12 +1,26 @@
+#pragma once
 #include "AVL_TREE.h"
-
-class Horse {
+#include "Horse.h"
+class Herd {
 private:
     int m_id;
     int m_horseNum;
-    AVL_TREE m_horseTree;
+    AVL_TREE<Horse>* m_horseTree;
 
 public:
+    /**
+     * Constructor - creates a Horse with a specific id and speed
+     *
+     * @param id - the unique id of the horse
+     * @param speed - the speed of the horse
+     */
+    Herd(int id);
+
+//    Herd(Herd& otherHerd);
+//
+//    int getId() const;
 };
+
+
 
 

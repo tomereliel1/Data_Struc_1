@@ -7,4 +7,12 @@ int Horse::getSpeed() const {
     return m_speed;
 }
 
+const Herd* Horse::getHerd() const{
+    return m_herd;
+}
+
+void Horse::setHerd(Herd* herd){
+    m_herd = herd;
+}
+
 

@@ -1,3 +1,5 @@
+#pragma once
+#include "Herd.h"
 class Horse {
 private:
     int m_id;
@@ -22,6 +24,11 @@ public:
      * @return - horse's speed
      */
      int getSpeed() const;
+
+     const Herd* getHerd() const;
+
+     void setHerd(Herd* herd);
+
 };
 
 
