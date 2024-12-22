@@ -4,9 +4,9 @@ class Horse {
 private:
     int m_id;
     int m_speed;
-    Herd* m_herd{};
-    Horse* m_follow;
-    Horse* m_followBY;
+    shared_ptr<Herd> m_herd; //herd
+    shared_ptr<Horse> m_follow; //leader's fake horse
+    shared_ptr<Horse> m_followBy;//self fake horse
     int m_followersNum;
 
 public:
@@ -25,13 +25,13 @@ public:
      */
      int getSpeed() const;
 
-     Herd* getHerd() const;
+     shared_ptr<Herd> getHerd() const;
 
-     void setHerd(Herd* herd);
+     void setHerd(shared_ptr<Herd> herd);
 
      void zeroFollowers();
 
-    void setFollow(Horse* horse);
+     void setFollow(shared_ptr<Horse> horse);
 
 };
 

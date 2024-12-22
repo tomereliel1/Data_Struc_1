@@ -12,6 +12,8 @@ private:
     AVL_TREE<T>* m_right;
     int m_height;
 
+    AVL_TREE<T>* insertAux(int id, shared_ptr<T> data);
+
 public:
     int getBalanceFactor() const;
     AVL_TREE<T>* rrRoll();
@@ -31,6 +33,8 @@ public:
     AVL_TREE<T>* find(int id);
 
     AVL_TREE<T>* insert(int id, shared_ptr<T> data);
+
+
 
     AVL_TREE<T>* remove(int id);
 
@@ -84,14 +88,18 @@ AVL_TREE<T>* AVL_TREE<T>::find(int id) {
 
 template <typename T>
 AVL_TREE<T>* AVL_TREE<T>::insert(int id, shared_ptr<T> data) {
-    std::cout << "insert " << id << " now in " << m_id << endl;
-    if (m_data == nullptr){
-        std::cout << "data was nullptr" << endl;
+    if (m_id == 0){
         m_id = id;
         m_data = data;
-  //      std::cout << "data is " << *data << endl;
         return this;
+    } else {
+        return insertAux(id, data);
     }
+}
+
+
+template <typename T>
+AVL_TREE<T>* AVL_TREE<T>::insertAux(int id, shared_ptr<T> data) {
     if (this->find(id) != nullptr) {
         return this;
     }
@@ -99,13 +107,13 @@ AVL_TREE<T>* AVL_TREE<T>::insert(int id, shared_ptr<T> data) {
         if (m_left == nullptr){
             m_left = new AVL_TREE<T>(id, data);
         } else {
-            m_left = m_left->insert(id, data);
+            m_left = m_left->insertAux(id, data);
         }
     } else {
         if (m_right == nullptr){
             m_right = new AVL_TREE<T>(id, data);
         } else {
-            m_right = m_right->insert(id, data);
+            m_right = m_right->insertAux(id, data);
             cout << "m_right is " << m_right->m_id << endl;
         }
     }
@@ -158,7 +166,7 @@ AVL_TREE<T>* AVL_TREE<T>::remove(int id) {
 //            cout << " after swap id is " << m_id << " data is " << *m_data << " and temp data is " << *(temp->m_data) << endl;
             m_right = m_right->remove(m_id);
         } else if (m_left == nullptr && m_right == nullptr){
-            delete(this);
+            delete this;
             return nullptr;
         }else if (m_left == nullptr){
             temp = m_right;
