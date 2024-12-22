@@ -19,9 +19,16 @@ void Horse::zeroFollowers(){
     m_followersNum = INITIAL_FOLLOWERS_NUM;
 }
 
-void Horse::setFollow(shared_ptr<Horse> horse){
+void Horse::setLeader(shared_ptr<Horse> horse){
     m_follow = horse;
 }
 
+void Horse::setFollower(shared_ptr<Horse> horse){
+    m_follow = horse;
+}
+
+shared_ptr<Horse> Horse::getFollower() const {
+    return m_followBy;
+}
 
 

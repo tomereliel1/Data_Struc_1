@@ -31,7 +31,12 @@ public:
 
      void zeroFollowers();
 
-     void setFollow(shared_ptr<Horse> horse);
+     void setLeader(shared_ptr<Horse> horse);
+
+    void setFollower(shared_ptr<Horse> horse);
+
+
+    shared_ptr<Horse> getFollower() const;
 
 };
 

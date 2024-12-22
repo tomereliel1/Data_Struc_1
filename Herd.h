@@ -1,6 +1,9 @@
 #pragma once
 #include "AVL_TREE.h"
 #include "Horse.h"
+
+class Horse;
+
 class Herd {
 private:
     int m_id;

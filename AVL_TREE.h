@@ -100,9 +100,9 @@ AVL_TREE<T>* AVL_TREE<T>::insert(int id, shared_ptr<T> data) {
 
 template <typename T>
 AVL_TREE<T>* AVL_TREE<T>::insertAux(int id, shared_ptr<T> data) {
-    if (this->find(id) != nullptr) {
+    /*if (this->find(id) != nullptr) {
         return this;
-    }
+    }*/
     if (m_id > id){
         if (m_left == nullptr){
             m_left = new AVL_TREE<T>(id, data);
