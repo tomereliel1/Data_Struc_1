@@ -4,14 +4,17 @@
 #include "plains25a1.h"
 
 
-Plains::Plains()
-{
-    
+Plains::Plains(){
+    horses = new AVL_TREE<Horse>();
+    herds = new AVL_TREE<Herd>();
+    emptyHerds = new AVL_TREE<Herd>();
 }
 
 Plains::~Plains()
 {
-    
+    delete(horses);
+    delete(herds);
+    delete(emptyHerds);
 }
 
 StatusType Plains::add_herd(int herdId)
