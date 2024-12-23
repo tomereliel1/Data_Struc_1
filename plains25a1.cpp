@@ -171,7 +171,7 @@ StatusType Plains::leave_herd(int horseId) {
             shared_ptr<Herd> herd = herds->find(herdId)->getData();
             if (herd->findLeader(herd->getHorseTree(), 0) == nullptr) {
                 return output_t<bool>(false);
-            }else if (run_check(herd->getHorseTree(), 1)){
+            }else if (herd->run_check(herd->getHorseTree(), 1)){
                 return output_t<bool>(true);
             }
         }
