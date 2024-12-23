@@ -36,19 +36,13 @@ StatusType Plains::add_herd(int herdId)
 }
 
 StatusType Plains::remove_herd(int herdId) {
-    if (herdId <= 0) {
-        return StatusType::INVALID_INPUT;
-    } else if (emptyHerds->find(herdId) != nullptr) {
-        return StatusType::FAILURE;
-    } else {
-        emptyHerds = emptyHerds->remove(herdId);
-        try {
-            if (herdId <= 0) {
-                return StatusType::INVALID_INPUT;
-            } else if (emptyHerds->find(herdId) == nullptr) {
-                return StatusType::FAILURE;
-            } else {
-                emptyHerds = emptyHerds->remove(herdId);
+    try {
+        if (herdId <= 0) {
+            return StatusType::INVALID_INPUT;
+        } else if (emptyHerds->find(herdId) == nullptr) {
+            return StatusType::FAILURE;
+        } else {
+            emptyHerds = emptyHerds->remove(herdId);
             }
         } catch (std::bad_alloc &e) {
             return StatusType::ALLOCATION_ERROR;
