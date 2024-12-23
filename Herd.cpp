@@ -29,7 +29,7 @@ shared_ptr<Horse> Herd::findLeader(AVL_TREE<Horse>* tree, int leadersCount){
     shared_ptr<Horse> leader = nullptr;
     if (tree->getData() != nullptr){
         tree->getData()->setLeaderFlag(0);
-        if (tree->getData()->getLeader() == nullptr){
+        if (tree->getData()->getLeader()->getLeader() == nullptr){
             leadersCount++;
             leader = tree->getData();
         }

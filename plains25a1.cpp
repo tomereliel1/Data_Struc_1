@@ -83,7 +83,6 @@ StatusType Plains::join_herd(int horseId, int herdId){
         }
         horses->find(horseId)->getData()->setHerd(herds->find(herdId)->getData());
         herds->find(herdId)->getData()->addHorse(horseId, horses->find(horseId)->getData());
-        //herds->find(herdId)->addHorse();
     } catch (std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
@@ -125,48 +124,33 @@ StatusType Plains::follow(int horseId, int horseToFollowId)
 }
 
 StatusType Plains::leave_herd(int horseId) {
-    if (horseId <= 0) {
-        return StatusType::INVALID_INPUT;
-    } else if (horses->find(horseId) == nullptr) {
-        return StatusType::FAILURE;
-    } else if (horses->find(horseId)->getData()->getHerd() == nullptr) {
-        return StatusType::FAILURE;
-    } else {
-        horses->find(horseId)->getData()->zeroFollowers();
-        horses->find(horseId)->getData()->setLeader(nullptr);
-        horses->find(horseId)->getData()->getHerd()->removeHorse(horseId);
-        if (horses->find(horseId)->getData()->getHerd()->getHorseNumber() == 0) {
-            emptyHerds = emptyHerds->insert(horses->find(horseId)->getData()->getHerd()->getId(),
-                                            make_shared<Herd>(horses->find(horseId)->getData()->getHerd()->getId()));
-            herds = herds->remove(horses->find(horseId)->getData()->getHerd()->getId());
-            try {
-                if (horseId <= 0) {
-                    return StatusType::INVALID_INPUT;
-                } else if (horses->find(horseId) == nullptr) {
-                    return StatusType::FAILURE;
-                } else if (horses->find(horseId)->getData()->getHerd() == nullptr) {
-                    return StatusType::FAILURE;
-                } else {
-                    horses->find(horseId)->getData()->zeroFollowers();
-                    horses->find(horseId)->getData()->setLeader(nullptr);
-                    horses->find(horseId)->getData()->nullFollowedBy();
-                    //        horses->find(horseId)->getData()->getLeader()->subHorse();
-                    horses->find(horseId)->getData()->getHerd()->removeHorse(horses->find(horseId)->getData()->getId());
-                    if (horses->find(horseId)->getData()->getHerd()->getHorseNumber() == 0) {
-                        emptyHerds = emptyHerds->insert(horses->find(horseId)->getData()->getHerd()->getId(),
-                                                        horses->find(horseId)->getData()->getHerd());
-                        herds = herds->remove(horses->find(horseId)->getData()->getHerd()->getId());
-
-                    }
-                    horses->find(horseId)->getData()->setHerd(nullptr);
-                }
-            } catch (std::bad_alloc &e) {
-                return StatusType::ALLOCATION_ERROR;
+    try {
+        if (horseId <= 0) {
+            return StatusType::INVALID_INPUT;
+        } else if (horses->find(horseId) == nullptr) {
+            return StatusType::FAILURE;
+        } else if (horses->find(horseId)->getData()->getHerd() == nullptr) {
+            return StatusType::FAILURE;
+        } else {
+            shared_ptr<Horse> horse = horses->find(horseId)->getData();
+            shared_ptr<Herd> herd = horse->getHerd();
+            horse->zeroFollowers();
+            horse->getLeader()->setLeader(nullptr);
+            horse->nullFollowedBy();
+            herd->removeHorse(horseId);
+            if (herd->getHorseNumber() == 0) {
+                emptyHerds = emptyHerds->insert(herd->getId(), make_shared<Herd>(herd->getId()));
+                herds = herds->remove(herd->getId());
             }
-            return StatusType::SUCCESS;
+            horse->setHerd(nullptr);
+            }
+
+        } catch (std::bad_alloc & e){
+            return StatusType::ALLOCATION_ERROR;
         }
-    }
+        return StatusType::SUCCESS;
 }
+
 
 
         output_t<int> Plains::get_speed(int horseId) {
@@ -183,10 +167,13 @@ StatusType Plains::leave_herd(int horseId) {
             return output_t<bool>(StatusType::INVALID_INPUT);
         } else if (herds->find(herdId) == nullptr) {
             return output_t<bool>(StatusType::FAILURE);
-        } else if (herds->find(herdId)->getData()->findLeader(herds->find(herdId)->getData()->getHorseTree(), 0) == nullptr) {
-            return output_t<bool>(false);
-        }else if (run_check(herds->find(herdId)->getData()->getHorseTree(), 1)){
-            return output_t<bool>(true);
+        } else {
+            shared_ptr<Herd> herd = herds->find(herdId)->getData();
+            if (herd->findLeader(herd->getHorseTree(), 0) == nullptr) {
+                return output_t<bool>(false);
+            }else if (run_check(herd->getHorseTree(), 1)){
+                return output_t<bool>(true);
+            }
         }
     }catch (std::bad_alloc& e){
         return output_t<bool>(StatusType::ALLOCATION_ERROR);

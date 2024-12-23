@@ -33,7 +33,7 @@ private:
                         return false;
                     } else if (temp->getLeaderFlag() == 0){
                         temp->setLeaderFlag(chains);
-                        temp = temp->getLeader();
+                        temp = temp->getLeader()->getLeader();
                     }
                 }
                 chains++;
