@@ -29,7 +29,7 @@ shared_ptr<Horse> Herd::findLeader(AVL_TREE<Horse>* tree, int leadersCount){
     shared_ptr<Horse> leader = nullptr;
     if (tree->getData() != nullptr){
         tree->getData()->setLeaderFlag(0);
-        if (tree->getData()->getLeader() == nullptr){
+        if (tree->getData()->getLeader()->getLeader() == nullptr){
             leadersCount++;
             leader = tree->getData();
         }
@@ -47,6 +47,30 @@ shared_ptr<Horse> Herd::findLeader(AVL_TREE<Horse>* tree, int leadersCount){
     }
 }
 
+bool run_check(AVL_TREE<Horse>* tree, int chains){
+    if (tree->getData() != nullptr) {
+        if (tree->getData()->getLeaderFlag() == 0) {
+            tree->getData()->setLeaderFlag(chains);
+            shared_ptr<Horse> temp = tree->getData();
+            while (temp != nullptr && (temp->getLeaderFlag() != 0 && temp->getLeaderFlag() != chains)){
+                if (temp->getLeaderFlag() == chains){
+                    return false;
+                } else if (temp->getLeaderFlag() == 0){
+                    temp->setLeaderFlag(chains);
+                    temp = temp->getLeader()->getLeader();
+                }
+            }
+            chains++;
+        }
+    }
+    if (tree->getLeft() != nullptr){
+        return run_check (tree->getLeft(), chains);
+    }
+    if (tree->getRight() != nullptr){
+        return run_check (tree->getRight(), chains);
+    }
+    return true;
+}
 
 
 
