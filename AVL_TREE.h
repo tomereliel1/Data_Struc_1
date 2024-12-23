@@ -125,7 +125,7 @@ AVL_TREE<T>* AVL_TREE<T>::insertAux(int id, shared_ptr<T> data) {
             m_right = new AVL_TREE<T>(id, data);
         } else {
             m_right = m_right->insertAux(id, data);
-            cout << "m_right is " << m_right->m_id << endl;
+            //cout << "m_right is " << m_right->m_id << endl;
         }
     }
 
@@ -135,25 +135,25 @@ AVL_TREE<T>* AVL_TREE<T>::insertAux(int id, shared_ptr<T> data) {
     if (balanceFactor == 2){
 
         if (m_left != nullptr && m_left->getBalanceFactor() == -1){
-            std::cout << "lr roll"<< std::endl;
+            //std::cout << "lr roll"<< std::endl;
             return lrRoll();
         } else {
-            std::cout << "ll roll"<< std::endl;
+            //std::cout << "ll roll"<< std::endl;
             return llRoll();
         }
     } else if (balanceFactor == -2){
         if (m_right != nullptr && m_right->getBalanceFactor() == 1){
-            std::cout << "rl roll" << std::endl;
+            //std::cout << "rl roll" << std::endl;
             return rlRoll();
         } else /* if (m_right->m_balanceFactor <= 0)*/ {
-            std::cout << "rr roll on " << m_id << std::endl;
+            //std::cout << "rr roll on " << m_id << std::endl;
             AVL_TREE<T>* temp = rrRoll();
-            std::cout << "root is " << temp->m_id << std::endl;
+            //std::cout << "root is " << temp->m_id << std::endl;
             return temp;
         }
     }
     if (m_right != nullptr){
-        cout << "returning " << m_id << " when m_right is " << m_right->m_id << endl;
+        //cout << "returning " << m_id << " when m_right is " << m_right->m_id << endl;
 
     }
     return this;
@@ -161,7 +161,7 @@ AVL_TREE<T>* AVL_TREE<T>::insertAux(int id, shared_ptr<T> data) {
 
 template <typename T>
 AVL_TREE<T>* AVL_TREE<T>::remove(int id) {
-    cout << "we at " << m_id << "looking to delete " << id << endl;
+    //cout << "we at " << m_id << "looking to delete " << id << endl;
     if (m_id > id){
         m_left = m_left->remove(id);
     } else if (m_id < id){
@@ -169,9 +169,9 @@ AVL_TREE<T>* AVL_TREE<T>::remove(int id) {
     } else {
         AVL_TREE<T>* temp = nullptr;
         if (m_left != nullptr && m_right != nullptr){
-            cout << m_id << " has 2 sons" << endl;
+            //cout << m_id << " has 2 sons" << endl;
             temp = m_right->findMin();
-            cout << m_id << " has 2 sons and we taking " << temp->m_id << endl;
+            //cout << m_id << " has 2 sons and we taking " << temp->m_id << endl;
             m_id = temp->m_id;
             m_data = temp->m_data;
 //            cout << " after swap id is " << m_id << " data is " << *m_data << " and temp data is " << *(temp->m_data) << endl;

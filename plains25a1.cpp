@@ -97,18 +97,18 @@ StatusType Plains::follow(int horseId, int horseToFollowId)
         if (horseId <= 0 || horseToFollowId <= 0 || horseId == horseToFollowId){
             return StatusType::INVALID_INPUT;
         }
-        AVL_TREE<Horse>* follower = horses->find(horseId);
-        AVL_TREE<Horse>* leader = horses->find(horseToFollowId);
-        if (follower == nullptr || leader == nullptr){
+        AVL_TREE<Horse>* followerNode = horses->find(horseId);
+        AVL_TREE<Horse>* leaderNode = horses->find(horseToFollowId);
+        if (followerNode == nullptr || leaderNode == nullptr){
             return StatusType::FAILURE;
         }
-        int followerHerdId = follower->getData()->getHerd()->getId();
-        int leaderHerdId = leader->getData()->getHerd()->getId();
+        shared_ptr<Horse> followerHorse = followerNode->getData();
+        shared_ptr<Horse> leaderHorse = leaderNode->getData();
+        int followerHerdId = followerHorse->getHerd()->getId();
+        int leaderHerdId = leaderHorse->getHerd()->getId();
         if (followerHerdId != leaderHerdId){
             return StatusType::FAILURE;
         }
-        shared_ptr<Horse> followerHorse = follower->getData();
-        shared_ptr<Horse> leaderHorse = leader->getData();
         if (leaderHorse->getFollower() == nullptr){
             shared_ptr<Horse> newLinkHorse = make_shared<Horse>(-1,-1);
             newLinkHorse->setLeader(leaderHorse);
@@ -134,7 +134,7 @@ StatusType Plains::leave_herd(int horseId) {
         } else {
             shared_ptr<Horse> horse = horses->find(horseId)->getData();
             shared_ptr<Herd> herd = horse->getHerd();
-            horse->zeroFollowers();
+            //horse->zeroFollowers();
             horse->getLeader()->setLeader(nullptr);
             horse->nullFollowedBy();
             herd->removeHorse(horseId);
@@ -165,29 +165,52 @@ output_t<int> Plains::get_speed(int horseId) {
 }
 
 output_t<bool> Plains::leads(int horseId, int otherHorseId) {
-    return false;
+    if (horseId <= 0 || otherHorseId <= 0 || horseId == otherHorseId){
+        return StatusType::INVALID_INPUT;
+    }
+    AVL_TREE<Horse>* followerNode = horses->find(horseId);
+    AVL_TREE<Horse>* leaderNode = horses->find(otherHorseId);
+    if (followerNode == nullptr || leaderNode == nullptr){
+        return StatusType::FAILURE;
+    } else {
+        int leaderId = leaderNode->getData()->getId();
+        shared_ptr<Horse> followerHorse = followerNode->getData();
+        return followerHorse->isFollowing(leaderId);
+    }
 }
 
 output_t<bool> Plains::can_run_together(int herdId) {
     try{
         if (herdId <= 0) {
-            return output_t<bool>(StatusType::INVALID_INPUT);
-        } else if (herds->find(herdId) == nullptr) {
-            return output_t<bool>(StatusType::FAILURE);
+            return {StatusType::INVALID_INPUT};
+            //return output_t<bool>(StatusType::INVALID_INPUT);
+        }
+        AVL_TREE<Herd>* herdNode = herds->find(herdId);
+        if (herdNode == nullptr) {
+            return {StatusType::FAILURE};
+            //return output_t<bool>(StatusType::FAILURE);
         } else {
-            shared_ptr<Herd> herd = herds->find(herdId)->getData();
-            if (herd->findLeader(herd->getHorseTree(), 0) == nullptr) {
-                return output_t<bool>(false);
-            }else if (herd->run_check(herd->getHorseTree(), 1)){
-                return output_t<bool>(true);
+            shared_ptr<Herd> herd = herdNode->getData();
+            shared_ptr<Horse> leader = herd->findLeader(herd->getHorseTree(), 0);
+            if (leader == nullptr) {
+                return {false};
+                //return output_t<bool>(false);
+            }
+            int leaderId = leader->getId();
+            if (herd->runCheck(herd->getHorseTree(),leaderId, 1)){
+                return {true};
+                //return output_t<bool>(true);
             }
         }
     }catch (std::bad_alloc& e){
-        return output_t<bool>(StatusType::ALLOCATION_ERROR);
+        return {StatusType::ALLOCATION_ERROR};
+        //return output_t<bool>(StatusType::ALLOCATION_ERROR);
     }
-
-            return output_t<bool>(false);
+    return {false};
+    //return output_t<bool>(false);
 }
 
+
+//herd->run_check(herd->getHorseTree(), 1
 
 

@@ -1,5 +1,8 @@
 #pragma once
 #include "Herd.h"
+
+class Herd;
+
 class Horse {
 private:
     int m_id;
@@ -7,9 +10,7 @@ private:
     shared_ptr<Herd> m_herd; //herd
     shared_ptr<Horse> m_follow; //leader's fake horse
     shared_ptr<Horse> m_followBy;//self fake horse
-    int m_followersNum;
-    int m_leaderFlag;
-//    int m_followersNum;
+    int m_chainIdx; // index of the chain
 
 public:
 
@@ -30,7 +31,7 @@ public:
 
     int getId() const;
 
-    int getLeaderFlag() const;
+    int getChainIdx() const;
 
     shared_ptr<Herd> getHerd() const;
 
@@ -46,12 +47,9 @@ public:
 
     void nullFollowedBy();
 
-    void setLeaderFlag(int flag);
+    void setChainIdx(int idx);
 
-    void zeroFollowers();
-
-//    void subHorse();
-
+    bool isFollowing(int leaderId);
 };
 
 

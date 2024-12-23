@@ -25,16 +25,15 @@ public:
 
     int getHorseNumber() const;
 
+    AVL_TREE<Horse>* getHorseTree();
+
     void removeHorse(int id);
 
     void addHorse(int id, shared_ptr<Horse> horse);
 
     shared_ptr<Horse> findLeader(AVL_TREE<Horse>* tree, int leaderCount);
 
-    bool run_check(AVL_TREE<Horse>* tree, int chains);
-
-    AVL_TREE<Horse>* getHorseTree();
-
+    bool runCheck(AVL_TREE<Horse>* tree,int leaderId, int chains);
 
 };
 

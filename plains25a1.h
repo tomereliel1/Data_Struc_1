@@ -14,7 +14,6 @@
 #define PLAINS25WINTER_WET1_H_
 #include "Horse.h"
 #include "Herd.h"
-#include "AVL_TREE.h"
 #include "wet1util.h"
 
 class Plains {
