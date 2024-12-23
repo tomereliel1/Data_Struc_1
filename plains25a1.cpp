@@ -48,8 +48,8 @@ StatusType Plains::remove_herd(int herdId) {
             return StatusType::ALLOCATION_ERROR;
         }
         return StatusType::SUCCESS;
-    }
 }
+
 
     StatusType Plains::add_horse(int horseId, int speed) {
         try {
