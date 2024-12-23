@@ -51,21 +51,21 @@ StatusType Plains::remove_herd(int herdId) {
 }
 
 
-    StatusType Plains::add_horse(int horseId, int speed) {
-        try {
-            if (horseId <= 0) {
-                return StatusType::INVALID_INPUT;
-            } else if (horses->find(horseId) != nullptr) {
-                return StatusType::FAILURE;
-            } else {
-                shared_ptr<Horse> newHorse = make_shared<Horse>(horseId, speed);
-                horses = horses->insert(horseId, newHorse);
-            }
-        } catch (std::bad_alloc &e) {
-            return StatusType::ALLOCATION_ERROR;
+StatusType Plains::add_horse(int horseId, int speed) {
+    try {
+        if (horseId <= 0) {
+            return StatusType::INVALID_INPUT;
+        } else if (horses->find(horseId) != nullptr) {
+            return StatusType::FAILURE;
+        } else {
+            shared_ptr<Horse> newHorse = make_shared<Horse>(horseId, speed);
+            horses = horses->insert(horseId, newHorse);
         }
-        return StatusType::SUCCESS;
+    } catch (std::bad_alloc &e) {
+        return StatusType::ALLOCATION_ERROR;
     }
+    return StatusType::SUCCESS;
+}
 
 
 StatusType Plains::join_herd(int horseId, int herdId){
@@ -169,15 +169,23 @@ StatusType Plains::leave_herd(int horseId) {
 }
 
 
-        output_t<int> Plains::get_speed(int horseId) {
-            return 0;
-        }
+output_t<int> Plains::get_speed(int horseId) {
+    if (horseId <=0){
+        return StatusType::INVALID_INPUT;
+    }
+    AVL_TREE<Horse>* horse = horses->find(horseId);
+    if (horse == nullptr){
+        return StatusType::FAILURE;
+    } else {
+        return horse->getData()->getSpeed();
+    }
+}
 
-        output_t<bool> Plains::leads(int horseId, int otherHorseId) {
-            return false;
-        }
+output_t<bool> Plains::leads(int horseId, int otherHorseId) {
+    return false;
+}
 
-        output_t<bool> Plains::can_run_together(int herdId) {
+output_t<bool> Plains::can_run_together(int herdId) {
     try{
         if (herdId <= 0) {
             return output_t<bool>(StatusType::INVALID_INPUT);

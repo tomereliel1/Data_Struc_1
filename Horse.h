@@ -12,20 +12,21 @@ private:
 //    int m_followersNum;
 
 public:
+
     /**
      * Constructor - creates a Horse with a specific id and speed
      *
      * @param id - the unique id of the horse
      * @param speed - the speed of the horse
      */
-     Horse(int id, int speed);
+    Horse(int id, int speed);
 
     /**
      * Gets the speed of the horse
      *
      * @return - horse's speed
      */
-     int getSpeed() const;
+    int getSpeed() const;
 
     int getId() const;
 
@@ -33,21 +34,21 @@ public:
 
     shared_ptr<Herd> getHerd() const;
 
-     void setHerd(shared_ptr<Herd> herd);
+    shared_ptr<Horse> getFollower() const;
 
-     void zeroFollowers();
+    shared_ptr<Horse> getLeader() const;
 
-     void setLeader(shared_ptr<Horse> horse);
+    void setHerd(shared_ptr<Herd> herd);
+
+    void setLeader(shared_ptr<Horse> horse);
 
     void setFollower(shared_ptr<Horse> horse);
-
-    shared_ptr<Horse> getFollower() const;
 
     void nullFollowedBy();
 
     void setLeaderFlag(int flag);
 
-    shared_ptr<Horse> getLeader() const;
+    void zeroFollowers();
 
 //    void subHorse();
 
