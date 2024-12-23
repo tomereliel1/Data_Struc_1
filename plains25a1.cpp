@@ -184,12 +184,22 @@ StatusType Plains::leave_herd(int horseId) {
         }
 
         output_t<bool> Plains::can_run_together(int herdId) {
-            if (herdId <= 0) {
-                return output_t<bool>(StatusType::INVALID_INPUT);
-            } else if (herds->find(herdId) == nullptr) {
-                return output_t<bool>(StatusType::FAILURE);
-            } else if (herds->find(herdId)->getData()->findLeader() == nullptr) {
-                return output_t<bool>(false);
-            }
-            return false;
+    try{
+        if (herdId <= 0) {
+            return output_t<bool>(StatusType::INVALID_INPUT);
+        } else if (herds->find(herdId) == nullptr) {
+            return output_t<bool>(StatusType::FAILURE);
+        } else if (herds->find(herdId)->getData()->findLeader(herds->find(herdId)->getData()->getHorseTree(), 0) == nullptr) {
+            return output_t<bool>(false);
+        }else if (run_check(herds->find(herdId)->getData()->getHorseTree(), 1)){
+            return output_t<bool>(true);
         }
+    }catch (std::bad_alloc& e){
+        return output_t<bool>(StatusType::ALLOCATION_ERROR);
+    }
+
+            return output_t<bool>(false);
+}
+
+
+

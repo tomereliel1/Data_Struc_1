@@ -22,6 +22,31 @@ private:
     AVL_TREE<Horse>* horses;
     AVL_TREE<Herd>* herds;
     AVL_TREE<Herd>* emptyHerds;
+
+    bool run_check(AVL_TREE<Horse>* tree, int chains){
+        if (tree->getData() != nullptr) {
+            if (tree->getData()->getLeaderFlag() == 0) {
+                tree->getData()->setLeaderFlag(chains);
+                shared_ptr<Horse> temp = tree->getData();
+                while (temp != nullptr && (temp->getLeaderFlag() != 0 && temp->getLeaderFlag() != chains)){
+                    if (temp->getLeaderFlag() == chains){
+                        return false;
+                    } else if (temp->getLeaderFlag() == 0){
+                        temp->setLeaderFlag(chains);
+                        temp = temp->getLeader();
+                    }
+                }
+                chains++;
+            }
+        }
+        if (tree->getLeft() != nullptr){
+            return run_check (tree->getLeft(), chains);
+        }
+        if (tree->getRight() != nullptr){
+            return run_check (tree->getRight(), chains);
+        }
+        return true;
+    }
     //
     // Here you may add anything you want
     //

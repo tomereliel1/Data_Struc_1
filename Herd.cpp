@@ -7,6 +7,10 @@ int Herd::getId() const{
     return m_id;
 }
 
+AVL_TREE<Horse>* Herd::getHorseTree(){
+    return m_horseTree;
+}
+
 void Herd::removeHorse(int id){
     m_horseNum--;
     m_horseTree = m_horseTree->remove(id);
@@ -21,30 +25,28 @@ void Herd::addHorse(int id, shared_ptr<Horse> horse) {
     m_horseNum++;
 }
 
-shared_ptr<Horse> Herd::findLeader(){
-    int leadersCount = 0, chains = 1;
-
-
+shared_ptr<Horse> Herd::findLeader(AVL_TREE<Horse>* tree, int leadersCount){
+    shared_ptr<Horse> leader = nullptr;
+    if (tree->getData() != nullptr){
+        tree->getData()->setLeaderFlag(0);
+        if (tree->getData()->getLeader() == nullptr){
+            leadersCount++;
+            leader = tree->getData();
+        }
+    }
+    if (m_horseTree->getLeft() != nullptr){
+        return findLeader(m_horseTree->getLeft(), leadersCount);
+    }
+    if (m_horseTree->getRight() != nullptr){
+        return findLeader(m_horseTree->getRight(), leadersCount);
+    }
+    if (leadersCount != 1){
+        return nullptr;
+    } else{
+        return leader;
+    }
 }
 
-void Herd::horseTreePreOrder() const{
 
-    if (m_horseTree->getData() != nullptr){
-        return m_horseTree->getData();
-    }
-    if (m_left == nullptr && m_right == nullptr){
-        std::cout << "back" << std::endl;
-        return;
-    }
-    if (m_left != nullptr){
-        std::cout << "going left" << std::endl;
-        m_left->printInOrder();
-    }
-    if (m_right != nullptr){
-        std::cout << "going right" << std::endl;
 
-        m_right->printInOrder();
-    }
-    std::cout << "back" << std::endl;
-}
 

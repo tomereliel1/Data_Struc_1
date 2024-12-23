@@ -34,7 +34,9 @@ public:
 
     AVL_TREE<T>* insert(int id, shared_ptr<T> data);
 
+    AVL_TREE<T>* getLeft();
 
+    AVL_TREE<T>* getRight();
 
     AVL_TREE<T>* remove(int id);
 
@@ -72,6 +74,15 @@ shared_ptr<T> AVL_TREE<T>::getData() const{
     return m_data;
 }
 
+template <typename T>
+AVL_TREE<T>* AVL_TREE<T>::getLeft(){
+    return m_left;
+}
+
+template <typename T>
+AVL_TREE<T>* AVL_TREE<T>::getRight(){
+    return m_right;
+}
 
 template <typename T>
 AVL_TREE<T>* AVL_TREE<T>::find(int id) {

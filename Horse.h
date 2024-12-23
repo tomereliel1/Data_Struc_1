@@ -8,6 +8,7 @@ private:
     shared_ptr<Horse> m_follow; //leader's fake horse
     shared_ptr<Horse> m_followBy;//self fake horse
     int m_followersNum;
+    int m_leaderFlag;
 //    int m_followersNum;
 
 public:
@@ -28,6 +29,8 @@ public:
 
     int getId() const;
 
+    int getLeaderFlag() const;
+
     shared_ptr<Herd> getHerd() const;
 
      void setHerd(shared_ptr<Herd> herd);
@@ -40,7 +43,9 @@ public:
 
     shared_ptr<Horse> getFollower() const;
 
-     void nullFollowedBy();
+    void nullFollowedBy();
+
+    void setLeaderFlag(int flag);
 
     shared_ptr<Horse> getLeader() const;
 

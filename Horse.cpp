@@ -1,7 +1,8 @@
 #include "Horse.h"
 const int INITIAL_FOLLOWERS_NUM = 0;
+const int INITIAL_FLAG = 0;
 Horse::Horse(int id, int speed) : m_id(id), m_speed(speed), m_herd(nullptr),m_follow(nullptr),
-    m_followBy(nullptr), m_followersNum(INITIAL_FOLLOWERS_NUM){}
+    m_followBy(nullptr), m_followersNum(INITIAL_FOLLOWERS_NUM), m_leaderFlag(INITIAL_FLAG){}
 
 int Horse::getSpeed() const {
     return m_speed;
@@ -40,6 +41,14 @@ void Horse::nullFollowedBy(){
 
 shared_ptr<Horse> Horse::getLeader() const{
     return m_follow;
+}
+
+int Horse::getLeaderFlag() const{
+    return m_leaderFlag;
+}
+
+void Horse::setLeaderFlag(int flag){
+    m_leaderFlag = flag;
 }
 
 

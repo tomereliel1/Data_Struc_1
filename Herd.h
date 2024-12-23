@@ -29,7 +29,11 @@ public:
 
     void addHorse(int id, shared_ptr<Horse> horse);
 
-    shared_ptr<Horse> findLeader();
+    shared_ptr<Horse> findLeader(AVL_TREE<Horse>* tree, int leaderCount);
+
+    AVL_TREE<Horse>* getHorseTree();
+
+
 };
 
 
