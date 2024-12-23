@@ -15,9 +15,9 @@ void Horse::setHerd(shared_ptr<Herd> herd){
     m_herd = herd;
 }
 
-void Horse::zeroFollowers(){
-    m_followersNum = INITIAL_FOLLOWERS_NUM;
-}
+//void Horse::zeroFollowers(){
+//    m_followersNum = INITIAL_FOLLOWERS_NUM;
+//}
 
 void Horse::setLeader(shared_ptr<Horse> horse){
     m_follow = horse;
@@ -29,6 +29,17 @@ void Horse::setFollower(shared_ptr<Horse> horse){
 
 shared_ptr<Horse> Horse::getFollower() const {
     return m_followBy;
+}
+int Herd::getId() const{
+    return m_id;
+}
+
+void Horse::nullFollowedBy(){
+    m_followBy = nullptr;
+}
+
+shared_ptr<Horse> Horse::getLeader() const{
+    return m_follow;
 }
 
 

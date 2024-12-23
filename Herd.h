@@ -19,15 +19,17 @@ public:
      */
     Herd(int id);
 
-    void addHorse();
-
 //    Herd(Herd& otherHerd);
 //
     int getId() const;
 
-    void subHorse();
-
     int getHorseNumber() const;
+
+    void removeHorse(int id);
+
+    void addHorse(int id, shared_ptr<Horse> horse);
+
+    shared_ptr<Horse> findLeader();
 };
 
 
