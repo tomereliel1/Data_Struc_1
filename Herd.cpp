@@ -1,7 +1,12 @@
 #include "Herd.h"
 const int INITIAL_NUM_OF_HORSES = 0;
-Herd::Herd(int id) : m_id(id), m_horseNum(INITIAL_NUM_OF_HORSES), m_horseTree(nullptr){}
+Herd::Herd(int id) : m_id(id), m_horseNum(INITIAL_NUM_OF_HORSES){
+    m_horseTree = new AVL_TREE<Horse>();
+}
 
+Herd::~Herd(){
+    delete(m_horseTree);
+}
 int Herd::getId() const{
     return m_id;
 }
@@ -24,30 +29,35 @@ void Herd::addHorse(int id, shared_ptr<Horse> horse) {
     m_horseNum++;
 }
 
-shared_ptr<Horse> Herd::findLeader(AVL_TREE<Horse>* tree, int leadersCount){
+shared_ptr<Horse> Herd::findLeader(AVL_TREE<Horse>* tree, int* leadersCountPtr){
     shared_ptr<Horse> leader = nullptr;
     shared_ptr<Horse> currentHorse = tree->getData();
     if (currentHorse != nullptr){
         currentHorse->setChainIdx(0);
         if (currentHorse->getLeader() == nullptr){
-            leadersCount++;
+            (*leadersCountPtr)++;
             leader = tree->getData();
         }else if (currentHorse->getLeader()->getLeader() == nullptr){
-            leadersCount++;
+            (*leadersCountPtr)++;
             leader = tree->getData();
         }
     }
+    shared_ptr<Horse> leftLeader;
+    shared_ptr<Horse> rightLeader;
     if (tree->getLeft() != nullptr){
-        return findLeader(tree->getLeft(), leadersCount);
+         leftLeader = findLeader(tree->getLeft(), leadersCountPtr);
     }
     if (tree->getRight() != nullptr){
-        return findLeader(tree->getRight(), leadersCount);
+        rightLeader = findLeader(tree->getRight(), leadersCountPtr);
     }
-    if (leadersCount != 1){
+    if ((*leadersCountPtr) > 1){
         return nullptr;
-    } else{
-        return leader;
+    } else if (leftLeader == nullptr && rightLeader != nullptr){
+        return rightLeader;
+    } else if (leftLeader != nullptr && rightLeader == nullptr){
+        return leftLeader;
     }
+    return leader;
 }
 
 bool Herd::runCheck(AVL_TREE<Horse>* tree,int leaderId, int chains){

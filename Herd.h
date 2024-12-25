@@ -18,7 +18,7 @@ public:
      * @param speed - the speed of the horse
      */
     Herd(int id);
-
+    ~Herd();
 //    Herd(Herd& otherHerd);
 //
     int getId() const;
@@ -31,7 +31,7 @@ public:
 
     void addHorse(int id, shared_ptr<Horse> horse);
 
-    shared_ptr<Horse> findLeader(AVL_TREE<Horse>* tree, int leaderCount);
+    shared_ptr<Horse> findLeader(AVL_TREE<Horse>* tree, int* leaderCountPtr);
 
     bool runCheck(AVL_TREE<Horse>* tree,int leaderId, int chains);
 

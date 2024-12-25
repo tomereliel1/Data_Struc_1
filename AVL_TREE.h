@@ -177,8 +177,8 @@ AVL_TREE<T>* AVL_TREE<T>::remove(int id) {
 //            cout << " after swap id is " << m_id << " data is " << *m_data << " and temp data is " << *(temp->m_data) << endl;
             m_right = m_right->remove(m_id);
         } else if (m_left == nullptr && m_right == nullptr){
-            delete this;
-            return nullptr;
+            m_data = nullptr;
+            return this;
         }else if (m_left == nullptr){
             temp = m_right;
             m_right = nullptr;

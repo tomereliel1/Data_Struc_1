@@ -22,6 +22,10 @@ public:
      */
     Horse(int id, int speed);
 
+    ~Horse();
+
+    //void deleteLinkingHorses(AVL_TREE<Horse>* horses);
+
     /**
      * Gets the speed of the horse
      *
@@ -50,6 +54,7 @@ public:
     void setChainIdx(int idx);
 
     bool isFollowing(int leaderId);
+
+    void zeroChainIdx();
+
 };
-
-

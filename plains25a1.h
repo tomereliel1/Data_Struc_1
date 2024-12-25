@@ -22,7 +22,7 @@ private:
     AVL_TREE<Herd>* herds;
     AVL_TREE<Herd>* emptyHerds;
 
-
+    void deleteLinkingHorses(AVL_TREE<Horse>* horseTree);
     //
     // Here you may add anything you want
     //

@@ -4,6 +4,23 @@
 #include "plains25a1.h"
 
 
+void Plains::deleteLinkingHorses(AVL_TREE<Horse>* horseTree){
+    shared_ptr<Horse> horse = horseTree->getData();
+    if (horse != nullptr){
+        horse->setLeader(nullptr);
+        horse->setHerd(nullptr);
+        horse->setFollower(nullptr);
+    }
+    AVL_TREE<Horse>* leftHorses = horseTree->getLeft();
+    AVL_TREE<Horse>* rightHorses = horseTree->getRight();
+    if (leftHorses != nullptr){
+        deleteLinkingHorses(leftHorses);
+    }
+    if (rightHorses != nullptr){
+        deleteLinkingHorses(rightHorses);
+    }
+}
+
 Plains::Plains()
 {
     horses = new AVL_TREE<Horse>();
@@ -13,11 +30,12 @@ Plains::Plains()
 
 Plains::~Plains()
 {
-    delete(horses);
-    delete(herds);
+    deleteLinkingHorses(horses);
     delete(emptyHerds);
+    delete(herds);
+    delete(horses);
 }
-
+//371275
 StatusType Plains::add_herd(int herdId)
 {
     try {
@@ -53,7 +71,7 @@ StatusType Plains::remove_herd(int herdId) {
 
 StatusType Plains::add_horse(int horseId, int speed) {
     try {
-        if (horseId <= 0) {
+        if (horseId <= 0 || speed <= 0) {
             return StatusType::INVALID_INPUT;
         } else if (horses->find(horseId) != nullptr) {
             return StatusType::FAILURE;
@@ -104,6 +122,9 @@ StatusType Plains::follow(int horseId, int horseToFollowId)
         }
         shared_ptr<Horse> followerHorse = followerNode->getData();
         shared_ptr<Horse> leaderHorse = leaderNode->getData();
+        if (followerHorse->getHerd() == nullptr || leaderHorse->getHerd() == nullptr){
+            return StatusType::FAILURE;
+        }
         int followerHerdId = followerHorse->getHerd()->getId();
         int leaderHerdId = leaderHorse->getHerd()->getId();
         if (followerHerdId != leaderHerdId){
@@ -125,18 +146,25 @@ StatusType Plains::follow(int horseId, int horseToFollowId)
 
 StatusType Plains::leave_herd(int horseId) {
     try {
+        AVL_TREE<Horse>* horseNode = horses->find(horseId);
         if (horseId <= 0) {
             return StatusType::INVALID_INPUT;
-        } else if (horses->find(horseId) == nullptr) {
+        } else if (horseNode == nullptr) {
             return StatusType::FAILURE;
-        } else if (horses->find(horseId)->getData()->getHerd() == nullptr) {
+        } else if (horseNode->getData()->getHerd() == nullptr) {
             return StatusType::FAILURE;
         } else {
-            shared_ptr<Horse> horse = horses->find(horseId)->getData();
+            shared_ptr<Horse> horse = horseNode->getData();
             shared_ptr<Herd> herd = horse->getHerd();
             //horse->zeroFollowers();
-            horse->getLeader()->setLeader(nullptr);
-            horse->nullFollowedBy();
+            /*if (horse->getLeader() != nullptr){
+                horse->getLeader()->setLeader(nullptr);
+            }*/
+            horse->setLeader(nullptr);
+            if (horse->getFollower() != nullptr){
+                horse->getFollower()->setLeader(nullptr);
+            }
+            horse->setFollower(nullptr);
             herd->removeHorse(horseId);
             if (herd->getHorseNumber() == 0) {
                 emptyHerds = emptyHerds->insert(herd->getId(), make_shared<Herd>(herd->getId()));
@@ -164,6 +192,7 @@ output_t<int> Plains::get_speed(int horseId) {
     }
 }
 
+//leads 372751 833599
 output_t<bool> Plains::leads(int horseId, int otherHorseId) {
     if (horseId <= 0 || otherHorseId <= 0 || horseId == otherHorseId){
         return StatusType::INVALID_INPUT;
@@ -191,13 +220,15 @@ output_t<bool> Plains::can_run_together(int herdId) {
             //return output_t<bool>(StatusType::FAILURE);
         } else {
             shared_ptr<Herd> herd = herdNode->getData();
-            shared_ptr<Horse> leader = herd->findLeader(herd->getHorseTree(), 0);
+            int leaderCount = 0;
+            int* leaderCountPtr = &leaderCount;
+            shared_ptr<Horse> leader = herd->findLeader(herd->getHorseTree(), leaderCountPtr);
             if (leader == nullptr) {
                 return {false};
                 //return output_t<bool>(false);
             }
-            int leaderId = leader->getId();
-            if (herd->runCheck(herd->getHorseTree(),leaderId, 1)){
+            int leaderrrrrrrId = leader->getId();
+            if (herd->runCheck(herd->getHorseTree(),leaderrrrrrrId, 1)){
                 return {true};
                 //return output_t<bool>(true);
             }
