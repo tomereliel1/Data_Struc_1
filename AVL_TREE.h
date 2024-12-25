@@ -40,6 +40,8 @@ public:
 
     AVL_TREE<T>* remove(int id);
 
+    AVL_TREE<T>* removeAux(int id);
+
     shared_ptr<T> getData() const;
 
     void printInOrder() const;
@@ -159,13 +161,25 @@ AVL_TREE<T>* AVL_TREE<T>::insertAux(int id, shared_ptr<T> data) {
     return this;
 }
 
+
 template <typename T>
 AVL_TREE<T>* AVL_TREE<T>::remove(int id) {
+    if (m_id == id && (m_right == nullptr && m_left == nullptr)){
+        m_data == nullptr;
+        m_id = 0;
+        return this;
+    }   else {
+        return removeAux(id);
+    }
+}
+
+template <typename T>
+AVL_TREE<T>* AVL_TREE<T>::removeAux(int id) {
     //cout << "we at " << m_id << "looking to delete " << id << endl;
     if (m_id > id){
-        m_left = m_left->remove(id);
+        m_left = m_left->removeAux(id);
     } else if (m_id < id){
-        m_right = m_right->remove(id);
+        m_right = m_right->removeAux(id);
     } else {
         AVL_TREE<T>* temp = nullptr;
         if (m_left != nullptr && m_right != nullptr){
@@ -175,10 +189,11 @@ AVL_TREE<T>* AVL_TREE<T>::remove(int id) {
             m_id = temp->m_id;
             m_data = temp->m_data;
 //            cout << " after swap id is " << m_id << " data is " << *m_data << " and temp data is " << *(temp->m_data) << endl;
-            m_right = m_right->remove(m_id);
+            m_right = m_right->removeAux(m_id);
         } else if (m_left == nullptr && m_right == nullptr){
-            m_data = nullptr;
-            return this;
+            //m_data = nullptr;
+            delete this;
+            return nullptr;
         }else if (m_left == nullptr){
             temp = m_right;
             m_right = nullptr;
