@@ -207,7 +207,7 @@ output_t<bool> Plains::leads(int horseId, int otherHorseId) {
         return followerHorse->isFollowing(leaderId);
     }
 }
-
+//can_run_together 512080
 output_t<bool> Plains::can_run_together(int herdId) {
     try{
         if (herdId <= 0) {
@@ -227,8 +227,10 @@ output_t<bool> Plains::can_run_together(int herdId) {
                 return {false};
                 //return output_t<bool>(false);
             }
-            int leaderrrrrrrId = leader->getId();
-            if (herd->runCheck(herd->getHorseTree(),leaderrrrrrrId, 1)){
+            int leaderId = leader->getId();
+            int chainNum = 1;
+            int *chains = &chainNum;
+            if (herd->runCheck(herd->getHorseTree(),leaderId, chains)){
                 return {true};
                 //return output_t<bool>(true);
             }

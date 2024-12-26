@@ -60,13 +60,13 @@ shared_ptr<Horse> Herd::findLeader(AVL_TREE<Horse>* tree, int* leadersCountPtr){
     return leader;
 }
 
-bool Herd::runCheck(AVL_TREE<Horse>* tree,int leaderId, int chains){
+bool Herd::runCheck(AVL_TREE<Horse>* tree,int leaderId, int* chains){
     shared_ptr<Horse> currentHorse = tree->getData();
     if (currentHorse != nullptr) {
         if (currentHorse->getChainIdx() == 0) {
-            currentHorse->setChainIdx(chains);
+            currentHorse->setChainIdx(*chains);
             //shared_ptr<Horse> temp = tree->getData();
-            int currentChain = chains;
+            int currentChain = *chains;
             int currentId = currentHorse->getId();
             while (currentId != leaderId){
                 shared_ptr<Horse> nextHorse = currentHorse->getLeader()->getLeader();
@@ -85,16 +85,21 @@ bool Herd::runCheck(AVL_TREE<Horse>* tree,int leaderId, int chains){
                     currentId = nextId;
                 }
             }
-            chains++;
+            (*chains)++;
         }
     }
+    bool left = true;
+    bool right = true;
     if (tree->getLeft() != nullptr){
-        return runCheck (tree->getLeft(),leaderId, chains);
+        left = runCheck (tree->getLeft(),leaderId, chains);
     }
     if (tree->getRight() != nullptr){
-        return runCheck (tree->getRight(),leaderId, chains);
+        right = runCheck (tree->getRight(),leaderId, chains);
     }
-    return true;
+    if (left && right){
+        return true;
+    }
+    return false;
 }
 
 

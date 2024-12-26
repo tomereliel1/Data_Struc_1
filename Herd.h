@@ -33,7 +33,7 @@ public:
 
     shared_ptr<Horse> findLeader(AVL_TREE<Horse>* tree, int* leaderCountPtr);
 
-    bool runCheck(AVL_TREE<Horse>* tree,int leaderId, int chains);
+    bool runCheck(AVL_TREE<Horse>* tree,int leaderId, int* chains);
 
 };
 
