@@ -65,7 +65,6 @@ bool Herd::runCheck(AVL_TREE<Horse>* tree,int leaderId, int* chains){
     if (currentHorse != nullptr) {
         if (currentHorse->getChainIdx() == 0) {
             currentHorse->setChainIdx(*chains);
-            //shared_ptr<Horse> temp = tree->getData();
             int currentChain = *chains;
             int currentId = currentHorse->getId();
             while (currentId != leaderId){
@@ -101,33 +100,3 @@ bool Herd::runCheck(AVL_TREE<Horse>* tree,int leaderId, int* chains){
     }
     return false;
 }
-
-
-/*
-bool Herd::run_check(AVL_TREE<Horse>* tree, int chains){
-    if (tree->getData() != nullptr) {
-        if (tree->getData()->getLeaderFlag() == 0) {
-            tree->getData()->setLeaderFlag(chains);
-            shared_ptr<Horse> temp = tree->getData();
-            while (temp != nullptr && (temp->getLeaderFlag() != 0 && temp->getLeaderFlag() != chains)){
-                if (temp->getLeaderFlag() == chains){
-                    return false;
-                } else if (temp->getLeaderFlag() == 0){
-                    temp->setLeaderFlag(chains);
-                    temp = temp->getLeader()->getLeader();
-                }
-            }
-            chains++;
-        }
-    }
-    if (tree->getLeft() != nullptr){
-        return run_check (tree->getLeft(), chains);
-    }
-    if (tree->getRight() != nullptr){
-        return run_check (tree->getRight(), chains);
-    }
-    return true;
-}
-
-*/
-

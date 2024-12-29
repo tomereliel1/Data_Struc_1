@@ -35,13 +35,15 @@ Plains::~Plains()
     delete(herds);
     delete(horses);
 }
-//371275
+
 StatusType Plains::add_herd(int herdId)
 {
     try {
         if (herdId <= 0){
             return StatusType::INVALID_INPUT;
-        } else if (emptyHerds->find(herdId) != nullptr){
+        } else if (emptyHerds->find(herdId) != nullptr) {
+            return StatusType::FAILURE;
+        } else if (herds->find(herdId) != nullptr) {
             return StatusType::FAILURE;
         } else {
             shared_ptr<Herd> newHerd = make_shared<Herd>(herdId);
@@ -156,10 +158,6 @@ StatusType Plains::leave_herd(int horseId) {
         } else {
             shared_ptr<Horse> horse = horseNode->getData();
             shared_ptr<Herd> herd = horse->getHerd();
-            //horse->zeroFollowers();
-            /*if (horse->getLeader() != nullptr){
-                horse->getLeader()->setLeader(nullptr);
-            }*/
             horse->setLeader(nullptr);
             if (horse->getFollower() != nullptr){
                 horse->getFollower()->setLeader(nullptr);
@@ -179,7 +177,6 @@ StatusType Plains::leave_herd(int horseId) {
         return StatusType::SUCCESS;
 }
 
-
 output_t<int> Plains::get_speed(int horseId) {
     if (horseId <=0){
         return StatusType::INVALID_INPUT;
@@ -192,7 +189,6 @@ output_t<int> Plains::get_speed(int horseId) {
     }
 }
 
-//leads 372751 833599
 output_t<bool> Plains::leads(int horseId, int otherHorseId) {
     if (horseId <= 0 || otherHorseId <= 0 || horseId == otherHorseId){
         return StatusType::INVALID_INPUT;
@@ -201,23 +197,29 @@ output_t<bool> Plains::leads(int horseId, int otherHorseId) {
     AVL_TREE<Horse>* leaderNode = horses->find(otherHorseId);
     if (followerNode == nullptr || leaderNode == nullptr){
         return StatusType::FAILURE;
+    }
+    shared_ptr<Horse> followerHorse = followerNode->getData();
+    shared_ptr<Horse> leaderHorse = leaderNode->getData();
+    shared_ptr<Herd> followerHerd = followerHorse->getHerd();
+    shared_ptr<Herd> leaderHerd = leaderHorse->getHerd();
+    if (followerHerd == nullptr || leaderHerd == nullptr){
+        return {false};
+    } else if (followerHerd->getId() != leaderHerd->getId()){
+        return {false};
     } else {
         int leaderId = leaderNode->getData()->getId();
-        shared_ptr<Horse> followerHorse = followerNode->getData();
         return followerHorse->isFollowing(leaderId);
     }
 }
-//can_run_together 512080
+
 output_t<bool> Plains::can_run_together(int herdId) {
     try{
         if (herdId <= 0) {
             return {StatusType::INVALID_INPUT};
-            //return output_t<bool>(StatusType::INVALID_INPUT);
         }
         AVL_TREE<Herd>* herdNode = herds->find(herdId);
         if (herdNode == nullptr) {
             return {StatusType::FAILURE};
-            //return output_t<bool>(StatusType::FAILURE);
         } else {
             shared_ptr<Herd> herd = herdNode->getData();
             int leaderCount = 0;
@@ -225,25 +227,16 @@ output_t<bool> Plains::can_run_together(int herdId) {
             shared_ptr<Horse> leader = herd->findLeader(herd->getHorseTree(), leaderCountPtr);
             if (leader == nullptr) {
                 return {false};
-                //return output_t<bool>(false);
             }
             int leaderId = leader->getId();
             int chainNum = 1;
             int *chains = &chainNum;
             if (herd->runCheck(herd->getHorseTree(),leaderId, chains)){
                 return {true};
-                //return output_t<bool>(true);
             }
         }
     }catch (std::bad_alloc& e){
         return {StatusType::ALLOCATION_ERROR};
-        //return output_t<bool>(StatusType::ALLOCATION_ERROR);
     }
     return {false};
-    //return output_t<bool>(false);
 }
-
-
-//herd->run_check(herd->getHorseTree(), 1
-
-

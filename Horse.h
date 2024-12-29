@@ -13,24 +13,10 @@ private:
     int m_chainIdx; // index of the chain
 
 public:
-
-    /**
-     * Constructor - creates a Horse with a specific id and speed
-     *
-     * @param id - the unique id of the horse
-     * @param speed - the speed of the horse
-     */
     Horse(int id, int speed);
 
     ~Horse();
 
-    //void deleteLinkingHorses(AVL_TREE<Horse>* horses);
-
-    /**
-     * Gets the speed of the horse
-     *
-     * @return - horse's speed
-     */
     int getSpeed() const;
 
     int getId() const;
@@ -48,8 +34,6 @@ public:
     void setLeader(shared_ptr<Horse> horse);
 
     void setFollower(shared_ptr<Horse> horse);
-
-    void nullFollowedBy();
 
     void setChainIdx(int idx);
 

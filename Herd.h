@@ -11,16 +11,10 @@ private:
     AVL_TREE<Horse>* m_horseTree;
 
 public:
-    /**
-     * Constructor - creates a Horse with a specific id and speed
-     *
-     * @param id - the unique id of the horse
-     * @param speed - the speed of the horse
-     */
     Herd(int id);
+
     ~Herd();
-//    Herd(Herd& otherHerd);
-//
+
     int getId() const;
 
     int getHorseNumber() const;
@@ -34,7 +28,6 @@ public:
     shared_ptr<Horse> findLeader(AVL_TREE<Horse>* tree, int* leaderCountPtr);
 
     bool runCheck(AVL_TREE<Horse>* tree,int leaderId, int* chains);
-
 };
 
 

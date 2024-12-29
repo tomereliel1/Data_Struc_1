@@ -48,15 +48,10 @@ void Horse::setFollower(shared_ptr<Horse> horse){
     m_followBy = horse;
 }
 
-void Horse::nullFollowedBy(){
-    m_followBy = nullptr;
-}
-
 void Horse::setChainIdx(int idx) {
     m_chainIdx = idx;
 }
 
-//674368                    663986
 bool Horse::isFollowing(int leaderId){
     if (m_follow == nullptr){
         return false;
@@ -108,5 +103,3 @@ void Horse::zeroChainIdx(){
         }
     }
 }
-
-
